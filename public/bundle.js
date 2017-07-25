@@ -73,9 +73,11 @@
 "use strict";
 
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _redux = __webpack_require__(8);
+
+var _index = __webpack_require__(25);
+
+var _index2 = _interopRequireDefault(_index);
 
 var _constants = __webpack_require__(24);
 
@@ -83,40 +85,8 @@ var _constants2 = _interopRequireDefault(_constants);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-// STEP 3 define reducers
-var reducer = function reducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
-  var action = arguments[1];
-
-  switch (action.type) {
-    case _constants2.default.POST_BOOK:
-      return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
-
-    case _constants2.default.DELETE_BOOK:
-      var currentBookToDelete = [].concat(_toConsumableArray(state.books));
-      return { books: currentBookToDelete.filter(function (book) {
-          return book.title !== action.payload.title;
-        }) };
-
-    case _constants2.default.UPDATE_BOOK:
-      var currentBooks = [].concat(_toConsumableArray(state.books));
-      var indexToUpdate = currentBooks.findIndex(function (book) {
-        return book.id === action.payload.id;
-      });
-      console.log('This is the index to update:', indexToUpdate);
-      var newBookToUpdate = _extends({}, currentBooks[indexToUpdate], { title: action.payload.title });
-      console.log("What is the book to be updated", newBookToUpdate);
-
-      return { books: [].concat(_toConsumableArray(currentBooks.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBooks.slice(indexToUpdate + 1))) };
-    default:
-      return state;
-  }
-};
-
 // STEP 1 create the store
-var store = (0, _redux.createStore)(reducer);
+var store = (0, _redux.createStore)(_index2.default);
 store.subscribe(function () {
   console.log('Current state of the store', store.getState());
 });
@@ -1419,6 +1389,78 @@ var constants = {
 };
 
 exports.default = constants;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _redux = __webpack_require__(8);
+
+var _booksReducers = __webpack_require__(26);
+
+exports.default = (0, _redux.combineReducers)({
+  books: _booksReducers.booksReducers
+});
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.booksReducers = booksReducers;
+
+var _constants = __webpack_require__(24);
+
+var _constants2 = _interopRequireDefault(_constants);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+// BOOKS REDUCERS
+function booksReducers() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
+  var action = arguments[1];
+
+  switch (action.type) {
+    case _constants2.default.POST_BOOK:
+      return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
+
+    case _constants2.default.DELETE_BOOK:
+      var currentBookToDelete = [].concat(_toConsumableArray(state.books));
+      return { books: currentBookToDelete.filter(function (book) {
+          return book.title !== action.payload.title;
+        }) };
+
+    case _constants2.default.UPDATE_BOOK:
+      var currentBooks = [].concat(_toConsumableArray(state.books));
+      var indexToUpdate = currentBooks.findIndex(function (book) {
+        return book.id === action.payload.id;
+      });
+      console.log('This is the index to update:', indexToUpdate);
+      var newBookToUpdate = _extends({}, currentBooks[indexToUpdate], { title: action.payload.title });
+      console.log("What is the book to be updated", newBookToUpdate);
+
+      return { books: [].concat(_toConsumableArray(currentBooks.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBooks.slice(indexToUpdate + 1))) };
+    default:
+      return state;
+  }
+}
 
 /***/ })
 /******/ ]);
