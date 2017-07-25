@@ -1,10 +1,10 @@
 "use strict"
 
-const express = require('express');
-const app = express();
-const path = require('path');
+var express = require('express');
+var app = express();
+var path = require('path');
 
-const port = process.env.PORT || 3000
+var port = process.env.PORT || 3000
 
 // Folder for static files and images
 app.use(express.static('public'));

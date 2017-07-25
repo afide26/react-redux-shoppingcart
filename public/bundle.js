@@ -701,28 +701,29 @@ function compose() {
 
 var _redux = __webpack_require__(8);
 
-var _constants = __webpack_require__(24);
-
-var _constants2 = _interopRequireDefault(_constants);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+// import C from './constants'
 
 // STEP 3 define reducers
 var reducer = function reducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
   var action = arguments[1];
 
   switch (action.type) {
-    case _constants2.default.INCREMENT:
-      return state + action.payload;
+    case "POST_BOOK":
+      return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
+    case "DELETE_BOOK":
+      var currentBooksToDeleteFrom = [].concat(_toConsumableArray(state.books));
+      var indexToDelete = currentBooksToDeleteFrom.findIndex(function (book) {
+        return book.id === action.payload.id;
+      });
+
+      // Use slice method to remove the book
+      return { books: currentBooksToDeleteFrom.filter(function (id) {
+          id !== action.payload.id;
+        }) };
       break;
-    case _constants2.default.DECREMENT:
-      return state - action.payload;
-      break;
-    case _constants2.default.POST_BOOK:
-      return [].concat(_toConsumableArray(state), [action.payload]);
     default:
       return state;
   }
@@ -736,21 +737,33 @@ store.subscribe(function () {
 
 // STEP 2 create and dispatch actions
 store.dispatch({
-  type: _constants2.default.POST_BOOK,
-  payload: {
+  type: "POST_BOOK",
+  payload: [{
     id: 1,
-    title: "Full Stack ReactJS and friends",
-    description: "Mastering ReactJS"
-  }
+    title: 'Mastering React and Redux',
+    price: 35,
+    description: 'This is the first book'
+  }, {
+    id: 3,
+    title: 'Learning React',
+    price: 25,
+    description: 'This is the second book'
+  }]
 });
 
 store.dispatch({
-  type: _constants2.default.POST_BOOK,
-  payload: {
-    id: 3,
-    title: "Full Stack React and Redux",
-    description: "Mastering ReactJS and ReactJS"
-  }
+  type: "POST_BOOK",
+  payload: [{
+    id: 4,
+    title: 'Full Stack React',
+    price: 25,
+    description: 'This is the third book'
+  }]
+});
+
+store.dispatch({
+  type: " DELETE_BOOK",
+  payload: { id: 1 }
 });
 
 /***/ }),
@@ -1362,25 +1375,6 @@ function applyMiddleware() {
     };
   };
 }
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var constants = {
-  INCREMENT: "INCREMENT",
-  DECREMENT: "DECREMENT",
-  POST_BOOK: "POST_BOOK"
-};
-
-exports.default = constants;
 
 /***/ })
 /******/ ]);
