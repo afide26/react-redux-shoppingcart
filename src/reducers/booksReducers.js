@@ -8,7 +8,7 @@ export function booksReducers (state={books:[]},action){
 
     case C.DELETE_BOOK:
      const currentBookToDelete = [...state.books];
-     return {books:currentBookToDelete.filter((book)=> book.title !== action.payload.title)}
+     return {books:currentBookToDelete.filter((book)=> book.id !== action.payload.id)}
 
     case C.UPDATE_BOOK :
      const currentBooks = [...state.books]
