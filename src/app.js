@@ -3,6 +3,7 @@ import React from 'react';
 import { render }from 'react-dom';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 import reducers from './reducers/index';
 
@@ -12,9 +13,10 @@ import { postBooks, deleteBooks, updateBooks } from './actions/bookActions';
 import BooksList from './components/pages/booksList'
 
 
-// STEP 1 create the store\
-const middleware = applyMiddleware(logger)
-const store = createStore(reducers, middleware);
+// STEP 1 create the store
+
+const middleware = applyMiddleware(logger);
+const store = createStore(reducers, composeWithDevTools(middleware))
 
 render(
   <Provider store ={store}>
@@ -49,8 +51,14 @@ store.dispatch(postBooks(
 
 
 
-store.dispatch(deleteBooks({id:3}))
-//
+// store.dispatch(deleteBooks({id:3}))
 store.dispatch(updateBooks({title:'Full Stack React and Friends', id:4}))
-//
 store.dispatch(addToCart([{id:1}]))
+
+// store.dispatch(postBooks(
+//   [{
+//     title:'Tao of Jeet Kune Do',
+//     description:'Bruce Lee\'s theories about the martial arts',
+//     price: 75
+//   }]
+// ))

@@ -4,17 +4,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class BooksList extends Component{
+
   render(){
-    console.log("IS THIS THE STATE?:", this.props.books)
     const bookList = this.props.books.map(function(booksArr){
-      <div key={booksArr.id}>
-        <h2>{booksArr.title}</h2>
-      </div>
+      return(
+        <div key={booksArr.id}>
+          <h2>Title: {booksArr.title}</h2>
+          <h2>Description: {booksArr.description}</h2>
+          <h2>Price: ${booksArr.price}</h2>
+          <hr/>
+        </div>
+      )
     })
 
     return(
       <div>
         <h1>Welcome to the Books Shopping Mall</h1>
+        {bookList}
       </div>
     )
   }

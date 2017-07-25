@@ -83,6 +83,8 @@ var _reactRedux = __webpack_require__(220);
 
 var _redux = __webpack_require__(3);
 
+var _reduxDevtoolsExtension = __webpack_require__(233);
+
 var _reduxLogger = __webpack_require__(13);
 
 var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
@@ -101,9 +103,10 @@ var _booksList2 = _interopRequireDefault(_booksList);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// STEP 1 create the store\
+// STEP 1 create the store
+
 var middleware = (0, _redux.applyMiddleware)(_reduxLogger2.default);
-var store = (0, _redux.createStore)(_index2.default, middleware);
+var store = (0, _redux.createStore)(_index2.default, (0, _reduxDevtoolsExtension.composeWithDevTools)(middleware));
 
 (0, _reactDom.render)(_react2.default.createElement(
     _reactRedux.Provider,
@@ -129,11 +132,17 @@ store.dispatch((0, _bookActions.postBooks)([{
     description: 'This is the third book'
 }]));
 
-store.dispatch((0, _bookActions.deleteBooks)({ id: 3 }));
-//
+// store.dispatch(deleteBooks({id:3}))
 store.dispatch((0, _bookActions.updateBooks)({ title: 'Full Stack React and Friends', id: 4 }));
-//
 store.dispatch((0, _cartActions.addToCart)([{ id: 1 }]));
+
+// store.dispatch(postBooks(
+//   [{
+//     title:'Tao of Jeet Kune Do',
+//     description:'Bruce Lee\'s theories about the martial arts',
+//     price: 75
+//   }]
+// ))
 
 /***/ }),
 /* 1 */
@@ -11116,16 +11125,29 @@ var BooksList = function (_Component) {
   _createClass(BooksList, [{
     key: 'render',
     value: function render() {
-      console.log("IS THIS THE STATE?:", this.props.books);
       var bookList = this.props.books.map(function (booksArr) {
-        _react2.default.createElement(
+        return _react2.default.createElement(
           'div',
           { key: booksArr.id },
           _react2.default.createElement(
             'h2',
             null,
+            'Title: ',
             booksArr.title
-          )
+          ),
+          _react2.default.createElement(
+            'h2',
+            null,
+            'Description: ',
+            booksArr.description
+          ),
+          _react2.default.createElement(
+            'h2',
+            null,
+            'Price: $',
+            booksArr.price
+          ),
+          _react2.default.createElement('hr', null)
         );
       });
 
@@ -11136,7 +11158,8 @@ var BooksList = function (_Component) {
           'h1',
           null,
           'Welcome to the Books Shopping Mall'
-        )
+        ),
+        bookList
       );
     }
   }]);
@@ -25034,6 +25057,33 @@ function shallowEqual(objA, objB) {
 
   return true;
 }
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var compose = __webpack_require__(3).compose;
+
+exports.__esModule = true;
+exports.composeWithDevTools = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
+    function() {
+      if (arguments.length === 0) return undefined;
+      if (typeof arguments[0] === 'object') return compose;
+      return compose.apply(null, arguments);
+    }
+);
+
+exports.devToolsEnhancer = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION__ :
+    function() { return function(noop) { return noop; } }
+);
+
 
 /***/ })
 /******/ ]);
