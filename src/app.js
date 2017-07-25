@@ -1,24 +1,25 @@
 "use strict"
 import { createStore } from 'redux';
-// import C from './constants'
+import C from './constants'
 
 // STEP 3 define reducers
 const reducer = (state={books:[]},action)=>{
   switch(action.type){
-    case "POST_BOOK" :
+    case C.POST_BOOK :
      return {books:[...state.books, ...action.payload]}
-     case "DELETE_BOOK":
-    const currentBookToDelete = [...state.books]
 
-    const indexToDelete = currentBookToDelete.findIndex(
-        function(book){
-        return book.id === action.payload.id;
-      }
+    case C.DELETE_BOOK:
+     const currentBookToDelete = [...state.books];
+     return {books:currentBookToDelete.filter((book)=> book.title !== action.payload.title)}
 
-      return {books: [...currentBookToDelete.slice(0,
-       indexToDelete),...currentBookToDelete.slice(indexToDelete +
-       1)]};
-      break;
+    case C.UPDATE_BOOK :
+     const currentBooks = [...state.books]
+     const indexToUpdate = currentBooks.findIndex((book)=> book.id === action.payload.id);
+     console.log('This is the index to update:',indexToUpdate)
+     const newBookToUpdate = {...currentBooks[indexToUpdate], title: action.payload.title}
+     console.log("What is the book to be updated", newBookToUpdate);
+
+     return {books:[...currentBooks.slice(0, indexToUpdate), newBookToUpdate, ...currentBooks.slice(indexToUpdate + 1)]}
     default:
      return state;
   }
@@ -35,7 +36,7 @@ store.subscribe(()=>{
 
 // STEP 2 create and dispatch actions
 store.dispatch({
-  type: "POST_BOOK",
+  type: C.POST_BOOK,
   payload:
   [
     {
@@ -54,7 +55,7 @@ store.dispatch({
 });
 
 store.dispatch({
-  type: "POST_BOOK",
+  type: C.POST_BOOK,
   payload:
   [
     {
@@ -66,7 +67,16 @@ store.dispatch({
   ]
 });
 
+
 store.dispatch({
-  type:" DELETE_BOOK",
-  payload:{id:1}
-});
+  type: C.DELETE_BOOK,
+  payload:{title:"Learning React"}
+})
+
+store.dispatch({
+  type: C.UPDATE_BOOK,
+  payload:{
+    title:'Full Stack React and Friends',
+    id:4
+  }
+})
