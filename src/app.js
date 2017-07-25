@@ -58,3 +58,8 @@ store.dispatch({
     id:4
   }
 })
+
+store.dispatch({
+  type: C.ADD_TO_CART,
+  payload:[{id:2}]
+})

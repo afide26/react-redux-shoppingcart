@@ -4,7 +4,8 @@ const constants = {
   DECREMENT:"DECREMENT",
   POST_BOOK:"POST_BOOK",
   DELETE_BOOK:"DELETE_BOOK",
-  UPDATE_BOOK:"UPDATE_BOOK"
+  UPDATE_BOOK:"UPDATE_BOOK",
+  ADD_TO_CART:"ADD_TO_CART"
 };
 
 export default constants;

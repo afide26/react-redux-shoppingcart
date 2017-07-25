@@ -130,6 +130,11 @@ store.dispatch({
   }
 });
 
+store.dispatch({
+  type: _constants2.default.ADD_TO_CART,
+  payload: [{ id: 2 }]
+});
+
 /***/ }),
 /* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1385,7 +1390,8 @@ var constants = {
   DECREMENT: "DECREMENT",
   POST_BOOK: "POST_BOOK",
   DELETE_BOOK: "DELETE_BOOK",
-  UPDATE_BOOK: "UPDATE_BOOK"
+  UPDATE_BOOK: "UPDATE_BOOK",
+  ADD_TO_CART: "ADD_TO_CART"
 };
 
 exports.default = constants;
@@ -1405,8 +1411,11 @@ var _redux = __webpack_require__(8);
 
 var _booksReducers = __webpack_require__(26);
 
+var _cartReducers = __webpack_require__(27);
+
 exports.default = (0, _redux.combineReducers)({
-  books: _booksReducers.booksReducers
+  books: _booksReducers.booksReducers,
+  cart: _cartReducers.cartReducers
 });
 
 /***/ }),
@@ -1457,6 +1466,39 @@ function booksReducers() {
       console.log("What is the book to be updated", newBookToUpdate);
 
       return { books: [].concat(_toConsumableArray(currentBooks.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBooks.slice(indexToUpdate + 1))) };
+    default:
+      return state;
+  }
+}
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.cartReducers = cartReducers;
+
+var _constants = __webpack_require__(24);
+
+var _constants2 = _interopRequireDefault(_constants);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function cartReducers() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { cart: [] };
+  var action = arguments[1];
+
+  switch (action.type) {
+    case _constants2.default.ADD_TO_CART:
+      return { cart: [].concat(_toConsumableArray(state.cart), _toConsumableArray(action.payload)) };
+      break;
     default:
       return state;
   }
