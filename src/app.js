@@ -26,34 +26,11 @@ render(
 )
 
 // STEP 2 create and dispatch actions
-store.dispatch(postBooks(
-  [
-    {
-        id:1,
-        title:'ReactJS and Friends',
-        description: 'ReactJS Starter book',
-        price: 20
-    },
-    {
-        id:3,
-        title: 'Learning React',
-        price: 25,
-        description: 'This is the second book'
-    },
-    {
-        id:4,
-        title: 'Full Stack React',
-        price: 25,
-        description: 'This is the third book'
-    }
-  ]
-))
-
 
 
 // store.dispatch(deleteBooks({id:3}))
-store.dispatch(updateBooks({title:'Full Stack React and Friends', id:4}))
-store.dispatch(addToCart([{id:1}]))
+// store.dispatch(updateBooks({title:'Full Stack React and Friends', id:4, price :45}))
+// store.dispatch(addToCart([{id:1}]))
 
 // store.dispatch(postBooks(
 //   [{

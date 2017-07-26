@@ -1,27 +1,38 @@
 "use strict"
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import { bindActionCreators } from 'redux';
+import { Grid, Button, Col, Row } from 'react-bootstrap';
+import { getBooks } from '../../actions/bookActions';
+import BookItem from './bookItem';
+import BooksForm from './booksForm';
 class BooksList extends Component{
-
+  componentDidMount(){
+    this.props.getBooks()
+  }
   render(){
     const bookList = this.props.books.map(function(booksArr){
       return(
-        <div key={booksArr.id}>
-          <h2>Title: {booksArr.title}</h2>
-          <h2>Description: {booksArr.description}</h2>
-          <h2>Price: ${booksArr.price}</h2>
-          <hr/>
-        </div>
+        <Col xs={12} sm={6} md={4} key={booksArr.id}>
+          <BookItem
+            id={booksArr.id}
+            title={booksArr.title}
+            description={booksArr.description}
+            price={booksArr.price}
+            />
+        </Col>
       )
     })
 
     return(
-      <div>
-        <h1>Welcome to the Books Shopping Mall</h1>
-        {bookList}
-      </div>
+      <Grid>
+        <Row style={{marginTop:'15px'}}>
+          <Col xs={12} sm={6}>
+            <BooksForm/>
+          </Col>
+          {bookList}
+        </Row>
+      </Grid>
     )
   }
 }
@@ -32,4 +43,11 @@ function mapStateToProps(state){
   }
 }
 
-export default connect(mapStateToProps)(BooksList)
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+    getBooks:getBooks,
+
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BooksList)

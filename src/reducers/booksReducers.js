@@ -1,8 +1,29 @@
 "use strict"
 import C from '../constants'
 // BOOKS REDUCERS
-export function booksReducers (state={books:[]},action){
+export function booksReducers (state={books:[
+    {
+        id:1,
+        title:'ReactJS and Friends',
+        description: 'ReactJS Starter book',
+        price: 20
+    },
+    {
+        id:3,
+        title: 'Learning React',
+        price: 25,
+        description: 'This is the second book'
+    },
+    {
+        id:4,
+        title: 'Full Stack React',
+        price: 25,
+        description: 'This is the third book'
+    }
+  ]},action){
   switch(action.type){
+    case C.GET_BOOKS :
+    return {...state, books:[...state.books]}
     case C.POST_BOOK :
      return {books:[...state.books, ...action.payload]}
 
