@@ -3,19 +3,19 @@ import C from '../constants'
 // BOOKS REDUCERS
 export function booksReducers (state={books:[
     {
-        id:1,
+        _id:1,
         title:'ReactJS and Friends',
         description: 'ReactJS Starter book',
         price: 20
     },
     {
-        id:3,
+        _id:3,
         title: 'Learning React',
         price: 25,
         description: 'This is the second book'
     },
     {
-        id:4,
+        _id:4,
         title: 'Full Stack React',
         price: 25,
         description: 'This is the third book'
@@ -29,11 +29,11 @@ export function booksReducers (state={books:[
 
     case C.DELETE_BOOK:
      const currentBookToDelete = [...state.books];
-     return {books:currentBookToDelete.filter((book)=> book.id !== action.payload.id)}
+     return {books:currentBookToDelete.filter((book)=> book._id !== action.payload._id)}
 
     case C.UPDATE_BOOK :
      const currentBooks = [...state.books]
-     const indexToUpdate = currentBooks.findIndex((book)=> book.id === action.payload.id);
+     const indexToUpdate = currentBooks.findIndex((book)=> book._id === action.payload._id);
      console.log('This is the index to update:',indexToUpdate)
      const newBookToUpdate = {...currentBooks[indexToUpdate], title: action.payload.title}
      console.log("What is the book to be updated", newBookToUpdate);
