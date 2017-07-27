@@ -8,7 +8,8 @@ const constants = {
   ADD_TO_CART:"ADD_TO_CART",
   GET_BOOKS:"GET_BOOKS",
   DELETE_CART_ITEM: "DELETE_CART_ITEM",
-  UPDATE_CART: "UPDATE_CART"
+  UPDATE_CART: "UPDATE_CART",
+  TOTAL_AMOUNT: "TOTAL_AMOUNT"
 };
 
 export default constants;

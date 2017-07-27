@@ -4982,7 +4982,8 @@ var constants = {
   ADD_TO_CART: "ADD_TO_CART",
   GET_BOOKS: "GET_BOOKS",
   DELETE_CART_ITEM: "DELETE_CART_ITEM",
-  UPDATE_CART: "UPDATE_CART"
+  UPDATE_CART: "UPDATE_CART",
+  TOTAL_AMOUNT: "TOTAL_AMOUNT"
 };
 
 exports.default = constants;
@@ -7364,6 +7365,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.addToCart = addToCart;
 exports.deleteCartItem = deleteCartItem;
 exports.updateCart = updateCart;
+exports.totalAmount = totalAmount;
 
 var _constants = __webpack_require__(64);
 
@@ -7394,6 +7396,22 @@ function updateCart(_id, unit) {
     _id: _id,
     unit: unit
   };
+}
+
+// CALCULATE AMOUNT OF ITEMS IN CART
+function totalAmount(payloadArr) {
+  var totals = payloadArr.map(function (cartArr) {
+    return cartArr.price * cartArr.quantity;
+  }).reduce(function (a, b) {
+    return a + b;
+  }, 0); //start from index 0
+
+  var totalQty = payloadArr.map(function (qty) {
+    return qty.quantity;
+  }).reduce(function (a, b) {
+    return a + b;
+  }, 0);
+  return { amount: totals.toFixed(2), qty: totalQty };
 }
 
 /***/ }),
@@ -19713,7 +19731,8 @@ var Cart = function (_Component) {
             _react2.default.createElement(
               'h6',
               null,
-              'Total amount:'
+              'Total amount:$',
+              _this.props.totals
             ),
             _react2.default.createElement(
               _reactBootstrap.Button,
@@ -19758,7 +19777,15 @@ var Cart = function (_Component) {
               _react2.default.createElement(
                 'h6',
                 null,
-                'Total Amount:$ '
+                'Total Amount:$ ',
+                _this.props.totals
+              ),
+              _react2.default.createElement(
+                'h6',
+                null,
+                'Total Quantity: ',
+                _this.props.totalQty,
+                ' books'
               )
             ),
             _react2.default.createElement(
@@ -19832,7 +19859,9 @@ var Cart = function (_Component) {
 
 function mapStateToProps(state) {
   return {
-    cart: state.cart.cart
+    cart: state.cart.cart,
+    totals: state.cart.totals,
+    totalQty: state.cart.totalQty
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -19933,6 +19962,8 @@ var _constants = __webpack_require__(64);
 
 var _constants2 = _interopRequireDefault(_constants);
 
+var _cartActions = __webpack_require__(86);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -19944,11 +19975,19 @@ function cartReducers() {
   switch (action.type) {
     case _constants2.default.ADD_TO_CART:
       //  return {cart:[...state, ...action.payload]};
-      return _extends({}, state, { cart: action.payload });
+      return _extends({}, state, {
+        cart: action.payload,
+        totals: (0, _cartActions.totalAmount)(action.payload).amount,
+        totalQty: (0, _cartActions.totalAmount)(action.payload).qty
+      });
       break;
     case _constants2.default.DELETE_CART_ITEM:
       //  return {cart:[...state, ...action.payload]};
-      return _extends({}, state, { cart: action.payload });
+      return _extends({}, state, {
+        cart: action.payload,
+        totals: (0, _cartActions.totalAmount)(action.payload).amount,
+        totalQty: (0, _cartActions.totalAmount)(action.payload).qty
+      });
       break;
     case _constants2.default.UPDATE_CART:
       var currentCartToUpdate = [].concat(_toConsumableArray(state.cart));
@@ -19960,7 +19999,11 @@ function cartReducers() {
       });
 
       var cartUpdate = [].concat(_toConsumableArray(currentCartToUpdate.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentCartToUpdate.slice(indexToUpdate + 1)));
-      return _extends({}, state, { cart: cartUpdate });
+      return _extends({}, state, {
+        cart: cartUpdate,
+        totals: (0, _cartActions.totalAmount)(cartUpdate).amount,
+        totalQty: (0, _cartActions.totalAmount)(cartUpdate).qty
+      });
       break;
     default:
       return state;

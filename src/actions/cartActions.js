@@ -25,3 +25,19 @@ export function updateCart(_id, unit){
     unit: unit
   })
 }
+
+// CALCULATE AMOUNT OF ITEMS IN CART
+export function totalAmount(payloadArr){
+  const totals = payloadArr.map((cartArr)=>{
+    return cartArr.price * cartArr.quantity
+  }).reduce((a,b)=>{
+    return a + b;
+  }, 0); //start from index 0
+
+  const totalQty = payloadArr.map((qty)=>{
+    return qty.quantity
+  }).reduce((a,b)=>{
+    return a + b;
+  }, 0)
+  return {amount: totals.toFixed(2), qty: totalQty}
+}
