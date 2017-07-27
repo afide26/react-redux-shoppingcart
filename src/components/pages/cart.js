@@ -3,9 +3,19 @@ import React, { Component } from 'react';
 import { Panel, Row, Well, Col, Button, ButtonGroup, Label} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { deleteCartItem } from '../../actions/cartActions';
+import { deleteCartItem, updateCart} from '../../actions/cartActions';
 
 class Cart extends Component{
+
+  onIncrement(_id){
+    this.props.updateCart(_id,1);
+  }
+
+  onDecrement(_id, quantity){
+    if(quantity > 1){
+      this.props.updateCart(_id, -1);
+    }
+  }
 
   onDeleteCartItem (_id){
     const cartToDelete = this.props.cart;
@@ -39,14 +49,14 @@ class Cart extends Component{
               <h6>Price: ${cartArr.price}.00</h6>
             </Col>
             <Col xs={12} sm={2}>
-              <h6>Qty. <Label bsStyle="success"></Label></h6>
+              <h6>Qty. <Label bsStyle="success">{cartArr.quantity}</Label></h6>
             </Col>
             <Col xs={12} sm={4}>
               <ButtonGroup style={{minWidth:'300px'}}>
-                <Button bsStyle="default" bsSize="small">
+                <Button bsStyle="default" bsSize="small" onClick={this.onDecrement.bind(this, cartArr._id, cartArr.quantity)}>
                   <span className="glyphicon glyphicon-minus"></span>
                 </Button>
-                <Button bsStyle="default" bsSize="small">
+                <Button bsStyle="default" bsSize="small" onClick={this.onIncrement.bind(this, cartArr._id)}>
                   <span className="glyphicon glyphicon-plus"></span>
                 </Button>
                 <span>     </span>
@@ -82,7 +92,8 @@ function mapStateToProps(state){
 }
 function mapDispatchToProps(dispatch){
     return bindActionCreators({
-      deleteCartItem: deleteCartItem
+      deleteCartItem: deleteCartItem,
+      updateCart: updateCart
     }, dispatch)
 }
 
