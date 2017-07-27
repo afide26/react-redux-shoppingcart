@@ -147,7 +147,8 @@ var constants = {
   DELETE_BOOK: "DELETE_BOOK",
   UPDATE_BOOK: "UPDATE_BOOK",
   ADD_TO_CART: "ADD_TO_CART",
-  GET_BOOKS: "GET_BOOKS"
+  GET_BOOKS: "GET_BOOKS",
+  DELETE_CART_ITEM: "DELETE_CART_ITEM"
 };
 
 exports.default = constants;
@@ -876,6 +877,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.addToCart = addToCart;
+exports.deleteCartItem = deleteCartItem;
 
 var _constants = __webpack_require__(1);
 
@@ -886,6 +888,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function addToCart(book) {
   return {
     type: _constants2.default.ADD_TO_CART,
+    payload: book
+  };
+}
+
+function deleteCartItem(book) {
+  return {
+    type: _constants2.default.DELETE_CART_ITEM,
     payload: book
   };
 }
@@ -1000,6 +1009,9 @@ function booksReducers() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.cartReducers = cartReducers;
 
 var _constants = __webpack_require__(1);
@@ -1008,15 +1020,18 @@ var _constants2 = _interopRequireDefault(_constants);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function cartReducers() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { cart: [] };
   var action = arguments[1];
 
   switch (action.type) {
     case _constants2.default.ADD_TO_CART:
-      return { cart: [].concat(_toConsumableArray(state), _toConsumableArray(action.payload)) };
+      //  return {cart:[...state, ...action.payload]};
+      return _extends({}, state, { cart: action.payload });
+      break;
+    case _constants2.default.DELETE_CART_ITEM:
+      //  return {cart:[...state, ...action.payload]};
+      return _extends({}, state, { cart: action.payload });
       break;
     default:
       return state;
@@ -43824,7 +43839,13 @@ var _reactBootstrap = __webpack_require__(475);
 
 var _reactRedux = __webpack_require__(220);
 
+var _redux = __webpack_require__(3);
+
+var _cartActions = __webpack_require__(11);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -43914,14 +43935,14 @@ var Cart = function (_Component) {
                 ),
                 _react2.default.createElement(
                   _reactBootstrap.Button,
-                  { bsStyle: 'danger', bsSize: 'small' },
+                  { bsStyle: 'danger', bsSize: 'small', onClick: _this.onDeleteCartItem.bind(_this, cartArr._id) },
                   _react2.default.createElement('span', { className: 'glyphicon glyphicon-trash' })
                 )
               )
             )
           )
         );
-      });
+      }, _this);
       return _react2.default.createElement(
         _reactBootstrap.Panel,
         { style: { margin: '0 auto', maxWidth: '97%' }, header: 'Cart', bsStyle: 'primary' },
@@ -43931,6 +43952,19 @@ var Cart = function (_Component) {
   }
 
   _createClass(Cart, [{
+    key: 'onDeleteCartItem',
+    value: function onDeleteCartItem(_id) {
+      var cartToDelete = this.props.cart;
+
+      var indexToDelete = cartToDelete.findIndex(function (cart) {
+        return cart._id === _id;
+      });
+
+      var cartAfterDelete = [].concat(_toConsumableArray(cartToDelete.slice(0, indexToDelete)), _toConsumableArray(cartToDelete.slice(indexToDelete + 1)));
+
+      this.props.deleteCartItem(cartAfterDelete);
+    }
+  }, {
     key: 'render',
     value: function render() {
       if (this.props.cart[0]) {
@@ -43949,7 +43983,13 @@ function mapStateToProps(state) {
     cart: state.cart.cart
   };
 }
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(Cart);
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    deleteCartItem: _cartActions.deleteCartItem
+  }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
 
 /***/ })
 /******/ ]);

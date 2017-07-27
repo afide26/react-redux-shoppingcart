@@ -7,3 +7,10 @@ export function addToCart(book){
     payload: book
   })
 }
+
+export function deleteCartItem(book){
+  return({
+    type: C.DELETE_CART_ITEM,
+    payload: book
+  })
+}

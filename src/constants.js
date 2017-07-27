@@ -6,7 +6,8 @@ const constants = {
   DELETE_BOOK:"DELETE_BOOK",
   UPDATE_BOOK:"UPDATE_BOOK",
   ADD_TO_CART:"ADD_TO_CART",
-  GET_BOOKS:"GET_BOOKS"
+  GET_BOOKS:"GET_BOOKS",
+  DELETE_CART_ITEM: "DELETE_CART_ITEM"
 };
 
 export default constants;
