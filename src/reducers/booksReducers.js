@@ -29,11 +29,17 @@ export function booksReducers (state={books:[
 
     case C.DELETE_BOOK:
      const currentBookToDelete = [...state.books];
-     return {books:currentBookToDelete.filter((book)=> book._id !== action.payload._id)}
-
+    //  const indexToDelete = currentBookToDelete.findIndex((book)=>{
+    //    return book._id == action.payload
+    //  })
+     //
+    //  return {books:[...currentBookToDelete.slice(0, indexToDelete),
+    //  ...currentBookToDelete.slice(indexToDelete + 1)]}
+    return {...state, books: currentBookToDelete.filter((book)=> book._id != action.payload)}
+     break;
     case C.UPDATE_BOOK :
      const currentBooks = [...state.books]
-     const indexToUpdate = currentBooks.findIndex((book)=> book._id === action.payload._id);
+     const indexToUpdate = currentBooks.findIndex((book)=> book._id == action.payload);
      console.log('This is the index to update:',indexToUpdate)
      const newBookToUpdate = {...currentBooks[indexToUpdate], title: action.payload.title}
      console.log("What is the book to be updated", newBookToUpdate);

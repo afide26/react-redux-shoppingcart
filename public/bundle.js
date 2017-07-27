@@ -19525,8 +19525,22 @@ var BooksForm = function (_Component) {
   }
 
   _createClass(BooksForm, [{
+    key: 'onDelete',
+    value: function onDelete() {
+      var bookId = (0, _reactDom.findDOMNode)(this.refs.delete).value;
+      this.props.deleteBooks(bookId);
+    }
+  }, {
     key: 'render',
     value: function render() {
+
+      var bookList = this.props.books.map(function (booksArr) {
+        return _react2.default.createElement(
+          'option',
+          { key: booksArr._id },
+          booksArr._id
+        );
+      });
       return _react2.default.createElement(
         _reactBootstrap.Well,
         null,
@@ -19577,6 +19591,38 @@ var BooksForm = function (_Component) {
             { onClick: this.handleSubmit, type: 'submit', bsStyle: 'success' },
             'Submit'
           )
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Panel,
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.FormGroup,
+            { controlId: 'formControlsSelect' },
+            _react2.default.createElement(
+              _reactBootstrap.ControlLabel,
+              null,
+              'Select a Book ID To Delete'
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.FormControl,
+              { ref: 'delete', componentClass: 'select', placeholder: 'select' },
+              _react2.default.createElement(
+                'option',
+                { value: 'select' },
+                'Select'
+              ),
+              bookList
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Button,
+            {
+              onClick: this.onDelete.bind(this),
+              bsStyle: 'danger',
+              bsSize: 'small',
+              className: 'pull-right' },
+            _react2.default.createElement('span', { className: 'glyphicon glyphicon-trash' })
+          )
         )
       );
     }
@@ -19585,13 +19631,20 @@ var BooksForm = function (_Component) {
   return BooksForm;
 }(_react.Component);
 
+function mapStateToProps(state) {
+  return {
+    books: state.books.books
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
-    postBooks: _bookActions.postBooks
+    postBooks: _bookActions.postBooks,
+    deleteBooks: _bookActions.deleteBooks
   }, dispatch);
 }
 
-exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(BooksForm);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksForm);
 
 /***/ }),
 /* 228 */
@@ -19881,7 +19934,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -19898,49 +19951,55 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 // BOOKS REDUCERS
 function booksReducers() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [{
-            _id: 1,
-            title: 'ReactJS and Friends',
-            description: 'ReactJS Starter book',
-            price: 20
-        }, {
-            _id: 3,
-            title: 'Learning React',
-            price: 25,
-            description: 'This is the second book'
-        }, {
-            _id: 4,
-            title: 'Full Stack React',
-            price: 25,
-            description: 'This is the third book'
-        }] };
-    var action = arguments[1];
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [{
+      _id: 1,
+      title: 'ReactJS and Friends',
+      description: 'ReactJS Starter book',
+      price: 20
+    }, {
+      _id: 3,
+      title: 'Learning React',
+      price: 25,
+      description: 'This is the second book'
+    }, {
+      _id: 4,
+      title: 'Full Stack React',
+      price: 25,
+      description: 'This is the third book'
+    }] };
+  var action = arguments[1];
 
-    switch (action.type) {
-        case _constants2.default.GET_BOOKS:
-            return _extends({}, state, { books: [].concat(_toConsumableArray(state.books)) });
-        case _constants2.default.POST_BOOK:
-            return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
+  switch (action.type) {
+    case _constants2.default.GET_BOOKS:
+      return _extends({}, state, { books: [].concat(_toConsumableArray(state.books)) });
+    case _constants2.default.POST_BOOK:
+      return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
 
-        case _constants2.default.DELETE_BOOK:
-            var currentBookToDelete = [].concat(_toConsumableArray(state.books));
-            return { books: currentBookToDelete.filter(function (book) {
-                    return book._id !== action.payload._id;
-                }) };
+    case _constants2.default.DELETE_BOOK:
+      var currentBookToDelete = [].concat(_toConsumableArray(state.books));
+      //  const indexToDelete = currentBookToDelete.findIndex((book)=>{
+      //    return book._id == action.payload
+      //  })
+      //
+      //  return {books:[...currentBookToDelete.slice(0, indexToDelete),
+      //  ...currentBookToDelete.slice(indexToDelete + 1)]}
+      return _extends({}, state, { books: currentBookToDelete.filter(function (book) {
+          return book._id != action.payload;
+        }) });
+      break;
+    case _constants2.default.UPDATE_BOOK:
+      var currentBooks = [].concat(_toConsumableArray(state.books));
+      var indexToUpdate = currentBooks.findIndex(function (book) {
+        return book._id == action.payload;
+      });
+      console.log('This is the index to update:', indexToUpdate);
+      var newBookToUpdate = _extends({}, currentBooks[indexToUpdate], { title: action.payload.title });
+      console.log("What is the book to be updated", newBookToUpdate);
 
-        case _constants2.default.UPDATE_BOOK:
-            var currentBooks = [].concat(_toConsumableArray(state.books));
-            var indexToUpdate = currentBooks.findIndex(function (book) {
-                return book._id === action.payload._id;
-            });
-            console.log('This is the index to update:', indexToUpdate);
-            var newBookToUpdate = _extends({}, currentBooks[indexToUpdate], { title: action.payload.title });
-            console.log("What is the book to be updated", newBookToUpdate);
-
-            return { books: [].concat(_toConsumableArray(currentBooks.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBooks.slice(indexToUpdate + 1))) };
-        default:
-            return state;
-    }
+      return { books: [].concat(_toConsumableArray(currentBooks.slice(0, indexToUpdate)), [newBookToUpdate], _toConsumableArray(currentBooks.slice(indexToUpdate + 1))) };
+    default:
+      return state;
+  }
 }
 
 /***/ }),
