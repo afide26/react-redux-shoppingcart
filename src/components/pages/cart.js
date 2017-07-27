@@ -1,11 +1,29 @@
 "use strict";
 import React, { Component } from 'react';
-import { Panel, Row, Well, Col, Button, ButtonGroup, Label} from 'react-bootstrap';
+import { Panel, Modal, Row, Well, Col, Button, ButtonGroup, Label} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { deleteCartItem, updateCart} from '../../actions/cartActions';
 
 class Cart extends Component{
+  constructor(props){
+    super(props);
+
+    this.state={
+      showModal:false
+    }
+  }
+  onOpenModal(){
+    this.setState({
+      showModal:true
+    })
+  }
+
+  onCloseModal(){
+    this.setState({
+      showModal:false
+    })
+  }
 
   onIncrement(_id){
     this.props.updateCart(_id,1);
@@ -72,6 +90,29 @@ class Cart extends Component{
     return(
       <Panel style={{margin:'0 auto', maxWidth:'97%'}} header="Cart" bsStyle="primary">
         {cartItemsList}
+        <Row>
+          <Col xs={12}>
+            <h6>Total amount:</h6>
+            <Button bsStyle="success" bsSize="small" onClick={this.onOpenModal.bind(this)}>
+              <i className="fa fa-shopping-basket"></i> Proceed to Checkout
+            </Button>
+          </Col>
+        </Row>
+        <Modal show={this.state.showModal} onHide={this.onCloseModal.bind(this)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Thank you!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h6>Your order has been saved!</h6>
+            <p>You will receive an email notification with the details of your purchase</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Col xs={6}>
+              <h6>Total Amount:$ </h6>
+            </Col>
+            <Button onClick={this.onCloseModal.bind(this)}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </Panel>
     )
   }
