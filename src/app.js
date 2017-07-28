@@ -10,9 +10,9 @@ import reducers from './reducers/index';
 import { addToCart } from './actions/cartActions';
 import { postBooks, deleteBooks, updateBooks } from './actions/bookActions';
 
-import BooksList from './components/pages/booksList'
-
-
+import BooksList from './components/pages/booksList';
+import Navigation from './components/menu';
+import Footer from './components/footer';
 // STEP 1 create the store
 
 const middleware = applyMiddleware(logger);
@@ -20,7 +20,11 @@ const store = createStore(reducers, composeWithDevTools(middleware))
 
 render(
   <Provider store ={store}>
-  <BooksList/>
+    <div>
+      <Navigation/>
+      <BooksList/>
+      <Footer/>
+    </div>
   </Provider>,
   document.getElementById("app")
 )
