@@ -20,7 +20,9 @@ class Navigation extends Component{
             <Nav pullRight>
               <NavItem eventKey={1} href="/admin">Admin</NavItem>
               <NavItem eventKey={2} href="/cart">Your Cart
-                <Badge className="badge" style={{marginLeft: '5px'}}>1</Badge>
+                  {(this.props.cartItemsNumber>0) ?
+                    (<Badge className="badge" style={{marginLeft: '5px'}}>{this.props.cartItemsNumber}</Badge>)
+                    : ''}
               </NavItem>
             </Nav>
           </Navbar.Collapse>

@@ -3,6 +3,7 @@ import React from 'react';
 import { render }from 'react-dom';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
+import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 import reducers from './reducers/index';
@@ -10,22 +11,28 @@ import reducers from './reducers/index';
 import { addToCart } from './actions/cartActions';
 import { postBooks, deleteBooks, updateBooks } from './actions/bookActions';
 
+import Cart from './components/pages/cart';
 import BooksList from './components/pages/booksList';
-import Navigation from './components/menu';
-import Footer from './components/footer';
+import BooksForm from './components/pages/booksForm';
+import Main from './main';
 // STEP 1 create the store
 
 const middleware = applyMiddleware(logger);
 const store = createStore(reducers, composeWithDevTools(middleware))
 
+const Routes = (
+  <Provider store={store}>
+    <Router history={browserHistory}>
+      <Route path="/" component={Main}>
+        <IndexRoute component={BooksList}/>
+        <Route path="/admin" component={BooksForm} />
+        <Route path="/cart" component={Cart} />
+      </Route>
+    </Router>
+  </Provider>
+)
 render(
-  <Provider store ={store}>
-    <div>
-      <Navigation/>
-      <BooksList/>
-      <Footer/>
-    </div>
-  </Provider>,
+  Routes,
   document.getElementById("app")
 )
 

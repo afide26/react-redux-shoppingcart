@@ -9,7 +9,7 @@ var port = process.env.PORT || 3000
 // Folder for static files and images
 app.use(express.static('public'));
 
-app.get('/', (req,res)=>{
+app.get('*', function(req,res){
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 })
 
