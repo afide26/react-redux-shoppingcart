@@ -37,9 +37,9 @@ app.post('/books', function(req,res){
   Books.create(book, function(err, books){
     if(err){
       throw err;
-    }else{
-      res.json(books);
     }
+    res.json(books);
+
   })
 })
 // END APIs
