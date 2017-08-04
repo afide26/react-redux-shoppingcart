@@ -34,12 +34,11 @@ var Books = require('./models/books.js');
 app.post('/books', function(req,res){
   var book = req.body;
 
-  Books.create(book, function(err, books){
+  Books.insert(book, function(err, books){
     if(err){
       throw err;
     }
     res.json(books);
-
   })
 })
 // END APIs
